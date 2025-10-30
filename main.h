@@ -57,8 +57,8 @@ typedef struct _simulation_run_data_
   double accumulated_call_time;
   unsigned random_seed;
   // unsigned num_trunks;
-  unsigned arrival_rate;
-  unsigned mean_call_duration;
+  double arrival_rate;
+  double mean_call_duration;
 } Simulation_Run_Data, * Simulation_Run_Data_Ptr;
 
 /*******************************************************************************/

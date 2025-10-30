@@ -76,19 +76,23 @@ int main(void)
 
   while ((random_seed = RANDOM_SEEDS[j++]) != 0)
   {
-    
-
+    k = 0;
+    printf("randseed\n");
     while ((num_trunks = NUM_TRUNKS[k++]) != 0)
     {
+      l = 0;
+      printf("trunk\n");
       while ((arr = ARRIVAL_RATES[l++]) != 0)
       {
+        printf("arrival rate \n NEWRUN");
         /* Create a new simulation_run. This gives a clock and eventlist. */
         simulation_run = simulation_run_new();
-
+        
         /* Add our data definitions to the simulation_run. */
         simulation_run_set_data(simulation_run, (void *)&data);
 
         /* Initialize our simulation_run data variables. */
+        printf("starting init\n ");
         data.mean_call_duration = MEAN_CALL_DURATION;
         data.random_seed = random_seed;
         data.blip_counter = 0;
@@ -98,25 +102,39 @@ int main(void)
         data.accumulated_call_time = 0.0;
         data.arrival_rate = arr;
         
+        printf("values init finit\n ");
+        printf("ARRIVAL RATE = %f\n", data.arrival_rate);
+        printf("MEAN CALL TIME = %f\n", data.mean_call_duration);
+        
+
 
         /* Create the channels. */
         data.channels = (Channel_Ptr *)xcalloc((int)num_trunks,             //changed from NUMBER_OF_CHANNELS to num_trunks for pt 2
                                                sizeof(Channel_Ptr));
+
+
+        
 
         /* Initialize the channels. */
         for (i = 0; i < num_trunks; i++)
         {
           *(data.channels + i) = server_new();
         }
+        printf("channels init finit\n ");
 
         /* Set the random number generator seed. */
         random_generator_initialize((unsigned)random_seed);
+
 
         /* Schedule the initial call arrival. */
         schedule_call_arrival_event(simulation_run,
                                     simulation_run_get_time(simulation_run) +
                                         exponential_generator((double)1 / data.arrival_rate));
+        
+        printf("first arrival finished\n ");
+        
 
+        printf("starting mass simulation\n ");
         /* Execute events until we are finished. */
         while (data.number_of_calls_processed < RUNLENGTH)
         {
