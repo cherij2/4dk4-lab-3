@@ -109,13 +109,16 @@ void ExcelNewData(Simulation_Run_Ptr this_simulation_run) {
   Simulation_Run_Data_Ptr sim_data;
   sim_data = (Simulation_Run_Data_Ptr) simulation_run_data(this_simulation_run);
 
-  fprintf(LAB3_EXCEL, "%d, %d, %f", sim_data->channels, (int)(sim_data->arrival_rate * sim_data->mean_call_duration), 1-); //better to keep (int) outside the loop to keep as much precision as possible until last moment
+  double xmtted_fraction = (double) (sim_data->call_arrival_count - sim_data->blocked_call_count)/sim_data->call_arrival_count;
+  int blocking_prob = (int)(sim_data->arrival_rate * sim_data->mean_call_duration); //better to keep (int) outside the loop to keep as much precision as possible until last moment
+
+  fprintf(LAB3_EXCEL, "%d,%d,%f", sim_data->channels, blocking_prob, xmtted_fraction); // no spaces if you want to use pandas later for data management
   fflush(LAB3_EXCEL);
 }
 
 void ExcelClose() {
-
+  fflush(LAB3_EXCEL);
+  fclose(LAB3_EXCEL);
 
 }
-
 
