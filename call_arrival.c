@@ -94,7 +94,7 @@ call_arrival_event(Simulation_Run_Ptr simulation_run, void * ptr)
 
   /* Schedule the next call arrival. */
   schedule_call_arrival_event(simulation_run,
-	      now + exponential_generator((double) 1/Call_ARRIVALRATE));
+	      now + exponential_generator((double) 1/sim_data->arrival_rate));
 }
 
 /*******************************************************************************/

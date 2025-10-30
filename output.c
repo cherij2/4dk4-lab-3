@@ -26,6 +26,8 @@
 /*******************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "simparameters.h"
 #include "main.h"
 #include "output.h"
@@ -83,4 +85,40 @@ void output_results(Simulation_Run_Ptr this_simulation_run)
 }
 
 
+
+
+//EXCEL IMPLEMENTATION FOR PART 2
+
+static FILE* LAB3_EXCEL = NULL;
+
+void ExcelInit(const char* file) {
+  time_t now = time(NULL);              //set time to now
+  struct tm *t = localtime(&now);       //set tm(ms, s, min, hours, etc) strct to local time 
+  LAB3_EXCEL = fopen(file, "a");        //use LAB3EXCEL(FILE* data type) to fopen "file.csv" in append mode, so we can keep adding
+  fprintf(LAB3_EXCEL, "NEW TRIAL: %02d: %02d: %02d \n Offered Load, Number of Trunks, Blocking Probability", t->tm_hour, t->tm_min, t->tm_sec);  //to add time and titles for data  
+
+}
+
+void ExcelOpener(const char* file) {
+  LAB3_EXCEL = fopen(file, "a");
+  
+}
+
+void ExcelNewData(Simulation_Run_Ptr this_simulation_run) {
+
+  Simulation_Run_Data_Ptr sim_data;
+  sim_data = (Simulation_Run_Data_Ptr) simulation_run_data(this_simulation_run);
+
+  double xmtted_fraction = (double) (sim_data->call_arrival_count - sim_data->blocked_call_count)/sim_data->call_arrival_count;
+  int blocking_prob = (int)(sim_data->arrival_rate * sim_data->mean_call_duration); //better to keep (int) outside the loop to keep as much precision as possible until last moment
+
+  fprintf(LAB3_EXCEL, "%d,%d,%f", sim_data->channels, blocking_prob, xmtted_fraction); // no spaces if you want to use pandas later for data management
+  fflush(LAB3_EXCEL);
+}
+
+void ExcelClose() {
+  fflush(LAB3_EXCEL);
+  fclose(LAB3_EXCEL);
+
+}
 
