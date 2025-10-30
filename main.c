@@ -52,11 +52,11 @@ int main(void)
    */
 
   unsigned RANDOM_SEEDS[] = {RANDOM_SEED_LIST, 0};
-  unsigned NUM_TRUNKS[] = {TRUNK_SIZES, 0};
-  unsigned SIZE_LOADS[] = {OFFERED_LOAD, 0};
+  unsigned NUM_TRUNKS[] = {NUM_TRUNKS_LIST, 0};
+  unsigned ARRIVAL_RATES[] = {Call_ARRIVALRATE_LIST, 0};
   unsigned random_seed;
-  unsigned trunk;
-  unsigned A;
+  unsigned num_trunks;
+  unsigned arr;
 
   /*
    * Loop for each random number generator seed, doing a separate
@@ -72,11 +72,15 @@ int main(void)
 
   */
 
+  data.mean_call_duration = MEAN_CALL_DURATION;
+
   while ((random_seed = RANDOM_SEEDS[j++]) != 0)
   {
-    while ((trunk = NUM_TRUNKS[k++]) != 0)
+    data.random_seed = random_seed;
+
+    while ((num_trunks = NUM_TRUNKS[k++]) != 0)
     {
-      while ((A = SIZE_LOADS[l++]) != 0)
+      while ((arr = ARRIVAL_RATES[l++]) != 0)
       {
         /* Create a new simulation_run. This gives a clock and eventlist. */
         simulation_run = simulation_run_new();
@@ -87,18 +91,18 @@ int main(void)
         /* Initialize our simulation_run data variables. */
         data.blip_counter = 0;
         data.call_arrival_count = 0;
-        data.calls_processed = 0;
         data.blocked_call_count = 0;
         data.number_of_calls_processed = 0;
         data.accumulated_call_time = 0.0;
-        data.random_seed = random_seed;
+        data.arrival_rate = arr;
+        
 
         /* Create the channels. */
-        data.channels = (Channel_Ptr *)xcalloc((int)NUMBER_OF_CHANNELS,
+        data.channels = (Channel_Ptr *)xcalloc((int)num_trunks,             //changed from NUMBER_OF_CHANNELS to num_trunks for pt 2
                                                sizeof(Channel_Ptr));
 
         /* Initialize the channels. */
-        for (i = 0; i < NUMBER_OF_CHANNELS; i++)
+        for (i = 0; i < num_trunks; i++)
         {
           *(data.channels + i) = server_new();
         }
@@ -109,7 +113,7 @@ int main(void)
         /* Schedule the initial call arrival. */
         schedule_call_arrival_event(simulation_run,
                                     simulation_run_get_time(simulation_run) +
-                                        exponential_generator((double)1 / Call_ARRIVALRATE));
+                                        exponential_generator((double)1 / data.arrival_rate));
 
         /* Execute events until we are finished. */
         while (data.number_of_calls_processed < RUNLENGTH)
