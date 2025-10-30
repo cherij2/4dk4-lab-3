@@ -72,11 +72,11 @@ int main(void)
 
   */
 
-  data.mean_call_duration = MEAN_CALL_DURATION;
+  
 
   while ((random_seed = RANDOM_SEEDS[j++]) != 0)
   {
-    data.random_seed = random_seed;
+    
 
     while ((num_trunks = NUM_TRUNKS[k++]) != 0)
     {
@@ -89,6 +89,8 @@ int main(void)
         simulation_run_set_data(simulation_run, (void *)&data);
 
         /* Initialize our simulation_run data variables. */
+        data.mean_call_duration = MEAN_CALL_DURATION;
+        data.random_seed = random_seed;
         data.blip_counter = 0;
         data.call_arrival_count = 0;
         data.blocked_call_count = 0;
