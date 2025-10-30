@@ -113,7 +113,7 @@ Channel_Ptr get_free_channel(Simulation_Run_Ptr simulation_run)
   sim_data = simulation_run_data(simulation_run);
   channels = sim_data->channels;
 
-  for (i=0; i<NUMBER_OF_CHANNELS; i++) {
+  for (i=0; i<sim_data->number_of_channels; i++) {
     if (server_state(*(channels+i)) == FREE)
       return *(channels+i);
   }

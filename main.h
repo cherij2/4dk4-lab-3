@@ -51,14 +51,13 @@ typedef struct _simulation_run_data_
   Channel_Ptr * channels;
   long int blip_counter;
   long int call_arrival_count;
-  long int calls_processed; // not used
+  long int calls_processed;
   long int blocked_call_count;
-  long int number_of_calls_processed; // used
+  long int number_of_calls_processed;
   double accumulated_call_time;
   unsigned random_seed;
-  // unsigned num_trunks;
   double arrival_rate;
-  double mean_call_duration;
+  int number_of_channels;
 } Simulation_Run_Data, * Simulation_Run_Data_Ptr;
 
 /*******************************************************************************/
