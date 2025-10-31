@@ -47,6 +47,11 @@ output_progress_msg_to_screen(Simulation_Run_Ptr);
 void
 output_results(Simulation_Run_Ptr);
 
+void ExcelInit(const char*);
+void ExcelOpener(const char*);
+void ExcelNewData(Simulation_Run_Ptr);
+void ExcelClose();
+
 /*******************************************************************************/
 
 #endif /* output.h */

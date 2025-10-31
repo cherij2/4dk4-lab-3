@@ -38,8 +38,10 @@
 
 /* Comma separated list of random seeds to run. */
 #define RANDOM_SEED_LIST 333, 4444, 55555, 400343389, 400381481
-
 /*******************************************************************************/
+
+#define EXCEL_FILE "L3Part2_Data.csv"
+
 
 #endif /* simparameters.h */
 

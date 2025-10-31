@@ -60,6 +60,7 @@ int main(void)
    * simulation_run run for each.
    */
 
+  ExcelInit(EXCEL_FILE);
   while ((random_seed = RANDOM_SEEDS[j++]) != 0) {
     k = 0;
     while ((Call_ARRIVALRATE = arrival_rates[k++]) != 0.0) {
@@ -116,5 +117,6 @@ int main(void)
 
     }
   }
+  ExcelClose();
   return 0;
 }
