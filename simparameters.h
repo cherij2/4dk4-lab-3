@@ -37,7 +37,7 @@
 #define NUMBERS_OF_CHANNELS 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 
 /* Comma separated list of random seeds to run. */
-#define RANDOM_SEED_LIST 333, 4444, 55555, 400343389, 400381481
+#define RANDOM_SEED_LIST 400343389, 400381481
 /*******************************************************************************/
 
 #define EXCEL_FILE "L3Part2_Data.csv"
