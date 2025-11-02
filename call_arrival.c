@@ -71,12 +71,14 @@ call_arrival_event(Simulation_Run_Ptr simulation_run, void * ptr)
   sim_data = simulation_run_data(simulation_run);
   sim_data->call_arrival_count++;
 
+  new_call = (Call_Ptr) xmalloc(sizeof(Call));
+  new_call->arrive_time = now;
+
   /* See if there is a free channel.*/
   if((free_channel = get_free_channel(simulation_run)) != NULL) {
 
     /* Yes, we found one. Allocate some memory and start the call. */
-    new_call = (Call_Ptr) xmalloc(sizeof(Call));
-    new_call->arrive_time = now;
+    
     new_call->call_duration = get_call_duration();
 
     /* Place the call in the free channel and schedule its
@@ -90,7 +92,20 @@ call_arrival_event(Simulation_Run_Ptr simulation_run, void * ptr)
   } else {
     /* No free channel was found. The call is blocked. */
     sim_data->blocked_call_count++;
+    fifoqueue_put(sim_data->buffer, (void*) new_call);
   }
+
+  /*FROM PART 2
+  if(server_state(data->link) == BUSY) {
+    fifoqueue_put(data->buffer, (void*) new_packet);
+  } else {
+    start_transmission_on_link(simulation_run, new_packet, data->link);
+  }
+
+  /* 
+   * Schedule the next packet arrival. Independent, exponentially distributed
+   * interarrival times gives us Poisson process arrivals.
+   */
 
   /* Schedule the next call arrival. */
   schedule_call_arrival_event(simulation_run,

@@ -30,17 +30,18 @@
 
 /*******************************************************************************/
 
-#define Call_ARRIVALRATES 1, 2, 3, 4, 5, 6, 7, 8, 9, 10   /* calls/minute */
+#define Call_ARRIVALRATES 20   /* calls/minute */
 #define MEAN_CALL_DURATION 1 /* minutes */
 #define RUNLENGTH 5e6 /* number of successful calls */
 #define BLIPRATE 1e3
-#define NUMBERS_OF_CHANNELS 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+#define NUMBERS_OF_CHANNELS 25
+#define wt_time 5
 
 /* Comma separated list of random seeds to run. */
-#define RANDOM_SEED_LIST 400343389, 400381481
+#define RANDOM_SEED_LIST 22, 333, 400381481, 400343389
 /*******************************************************************************/
 
-#define EXCEL_FILE "L3Part2_Data.csv"
+#define EXCEL_FILE "L3Part4_Data.csv"
 
 
 #endif /* simparameters.h */

@@ -27,6 +27,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 #include "simparameters.h"
 #include "main.h"
 #include "output.h"
@@ -110,13 +111,23 @@ void ExcelNewData(Simulation_Run_Ptr this_simulation_run) {
   Simulation_Run_Data_Ptr sim_data;
   sim_data = (Simulation_Run_Data_Ptr) simulation_run_data(this_simulation_run);
 
+
   double xmtted_fraction = (double) (sim_data->call_arrival_count - sim_data->blocked_call_count) / sim_data->call_arrival_count;
   int offered_load = (int)(sim_data->arrival_rate * MEAN_CALL_DURATION); //better to keep (int) outside the loop to keep as much precision as possible until last moment
-  double blocking_prob = (double)(1-xmtted_fraction);
+  double blocking_prob = (double)(1-xmtted_fraction); // delayed probability
+
+  
+  double Pw = ((pow(offered_load, sim_data->number_of_channels)) / factorial(sim_data->number_of_channels)) /
+              ( ((pow(offered_load, sim_data->number_of_channels)) / factorial(sim_data->number_of_channels)) + 
+                  (((1 - (offered_load / sim_data->number_of_channels)) ) * (Pw_series_sum(offered_load, sim_data->number_of_channels))) );
+
+  printf("%.5f\n", sim_data->accumulated_wait_time / sim_data->number_of_calls_processed);
+  printf("%.5f\n", (double) sim_data->waited_under_count / sim_data->number_of_calls_processed);
 
   printf("OFFERED LOAD: %d\n", offered_load);
   printf("NUMBER OF TRUNKS: %d\n", sim_data->number_of_channels);
-  fprintf(LAB3_EXCEL, "%d,%d,%d,%.5f,%.5f \n", sim_data->random_seed, offered_load, sim_data->number_of_channels, blocking_prob, xmtted_fraction); // no spaces if you want to use pandas later for data management
+  printf("Pw: %.5f\n", Pw);
+  fprintf(LAB3_EXCEL, "%d,%d,%d,%.5f,%.5f,%.5f \n", sim_data->random_seed, offered_load, sim_data->number_of_channels, blocking_prob, xmtted_fraction, Pw); // no spaces if you want to use pandas later for data management
   fflush(LAB3_EXCEL);
 }
 
@@ -124,4 +135,22 @@ void ExcelClose() {
   fflush(LAB3_EXCEL);
   fclose(LAB3_EXCEL);
 
+}
+
+
+double factorial(int n) {
+  double start = 1.0;
+  for(int i = 1; i<= n; i++) {
+    start *= i;
+  }
+  return start;
+}
+
+
+double Pw_series_sum(int N, double A) {
+  double sum = 0;
+  for(int i = 0; i < N; i++) {
+    sum += (pow(A, i)) / (i);
+  }
+  return sum;
 }

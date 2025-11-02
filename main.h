@@ -44,10 +44,16 @@ typedef struct _call_
   double arrive_time;
   double call_duration;
   Channel_Ptr channel;
+
+  //part 4
+  double waiting_time;
 } Call, * Call_Ptr;
+
+
 
 typedef struct _simulation_run_data_
 {
+  Fifoqueue_Ptr buffer;
   Channel_Ptr * channels;
   long int blip_counter;
   long int call_arrival_count;
@@ -58,6 +64,12 @@ typedef struct _simulation_run_data_
   unsigned random_seed;
   int arrival_rate;
   int number_of_channels;
+
+  //part 4
+  long int waited_call_count;
+  long int waited_under_count;
+  double accumulated_wait_time;
+
 } Simulation_Run_Data, * Simulation_Run_Data_Ptr;
 
 /*******************************************************************************/

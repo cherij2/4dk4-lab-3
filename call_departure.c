@@ -63,8 +63,10 @@ void
 end_call_on_channel_event(Simulation_Run_Ptr simulation_run, void * c_ptr)
 {
   Call_Ptr this_call;
+  Call_Ptr next_call;
   Channel_Ptr channel;
   Simulation_Run_Data_Ptr sim_data;
+  Channel_Ptr free_channel;
   double now;
 
   channel = (Channel_Ptr) c_ptr;
@@ -81,10 +83,34 @@ end_call_on_channel_event(Simulation_Run_Ptr simulation_run, void * c_ptr)
   sim_data->number_of_calls_processed++;
   sim_data->accumulated_call_time += now - this_call->arrive_time;
 
+  //pat 4
+  sim_data->accumulated_wait_time += this_call->waiting_time;
+  if(this_call->waiting_time < wt_time) 
+    sim_data->waited_under_count++;
+
   output_progress_msg_to_screen(simulation_run);
 
   /* This call is done. Free up its allocated memory.*/
   xfree((void*) this_call);
+
+  if(fifoqueue_size(sim_data->buffer) > 0 && ((free_channel = get_free_channel(simulation_run)) != NULL)) {
+    next_call = (Call_Ptr) fifoqueue_get(sim_data->buffer);
+    
+    //this is like start_transmission_on_link()
+    server_put(free_channel, (void*) next_call);
+    next_call->channel = free_channel;
+
+    schedule_end_call_on_channel_event(simulation_run,
+				       now + next_call->call_duration,
+				       (void *) free_channel);
+  }
+
+  /* PART 2 
+  if(fifoqueue_size(data->buffer) > 0) {
+    next_packet = (Packet_Ptr) fifoqueue_get(data->buffer);
+    start_transmission_on_link(simulation_run, next_packet, link);
+  }
+  */
 }
 
 

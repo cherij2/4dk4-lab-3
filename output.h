@@ -51,7 +51,8 @@ void ExcelInit(const char*);
 void ExcelOpener(const char*);
 void ExcelNewData(Simulation_Run_Ptr);
 void ExcelClose();
-
+double Pw_series_sum(int, double);
+double factorial(int);
 /*******************************************************************************/
 
 #endif /* output.h */

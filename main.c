@@ -84,6 +84,13 @@ int main(void)
         data.random_seed = random_seed;
         data.number_of_channels = NUMBER_OF_CHANNELS;
 
+        // data.buffer = fifoqueue_new();
+
+        data.waited_call_count = 0;
+        data.waited_under_count = 0;
+        data.accumulated_wait_time = 0.0;
+        data.buffer = fifoqueue_new();
+
         /* Create the channels. */
         data.channels = (Channel_Ptr *) xcalloc((int) NUMBER_OF_CHANNELS,
                   sizeof(Channel_Ptr));
