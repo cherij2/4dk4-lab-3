@@ -96,6 +96,8 @@ end_call_on_channel_event(Simulation_Run_Ptr simulation_run, void * c_ptr)
   if(fifoqueue_size(sim_data->buffer) > 0 && ((free_channel = get_free_channel(simulation_run)) != NULL)) {
     next_call = (Call_Ptr) fifoqueue_get(sim_data->buffer);
     
+    next_call->call_duration = get_call_duration();
+    next_call->waiting_time = now - next_call->arrive_time;
     //this is like start_transmission_on_link()
     server_put(free_channel, (void*) next_call);
     next_call->channel = free_channel;

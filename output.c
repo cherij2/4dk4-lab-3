@@ -121,8 +121,8 @@ void ExcelNewData(Simulation_Run_Ptr this_simulation_run) {
               ( ((pow(offered_load, sim_data->number_of_channels)) / factorial(sim_data->number_of_channels)) + 
                   (((1 - (offered_load / sim_data->number_of_channels)) ) * (Pw_series_sum(offered_load, sim_data->number_of_channels))) );
 
-  printf("%.5f\n", sim_data->accumulated_wait_time / sim_data->number_of_calls_processed);
-  printf("%.5f\n", (double) sim_data->waited_under_count / sim_data->number_of_calls_processed);
+  printf("%.5f\n", sim_data->accumulated_wait_time / sim_data->number_of_calls_processed);  //avg delay time 
+  printf("%.5f\n", (double) sim_data->waited_under_count / sim_data->number_of_calls_processed);  //avg number of customers delayed
 
   printf("OFFERED LOAD: %d\n", offered_load);
   printf("NUMBER OF TRUNKS: %d\n", sim_data->number_of_channels);
